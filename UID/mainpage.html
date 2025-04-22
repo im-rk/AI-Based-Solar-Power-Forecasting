@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI-Based Solar Power Forecasting</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Rajdhani', sans-serif;
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 40px 0 10px;
+    }
+
+    h2 {
+      margin-top: 20px;
+      font-size: 2rem;
+    }
+
+    h3 {
+      margin-top: 30px;
+      font-size: 1.6rem;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      margin: 40px auto;
+      max-width: 900px;
+    }
+
+    .image {
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    ul {
+      text-align: center;
+      margin: 10px auto 20px;
+      padding-left: 0;
+      max-width: 700px;
+      line-height: 1.7;
+      list-style: none;
+    }
+
+    ul li {
+      display: inline-block;
+      padding: 10px;
+      width: 100%;
+    }
+
+    .predict-button-wrapper {
+      margin: 60px 0;
+    }
+
+    .predict-button {
+      padding: 16px 40px;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(135deg, #ff512f, #dd2476);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(221, 36, 118, 0.4);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .predict-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 14px 40px rgba(221, 36, 118, 0.6);
+    }
+
+    .team-section {
+      margin: 60px auto;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        margin: 20px;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .image {
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="section">
+    <header>
+    <h1>AI-Based Solar Power Forecasting</h1>
+    </header>
+    <p>Welcome to our project presentation! Explore our innovative AI-driven solar power forecasting system.</p>
+  </div>
+
+  <div class="section">
+    <img src="{{ url_for('static', filename='solarpanel.jpg') }}" alt="Solar Panel" class="image" />
+    <h2>About</h2>
+    <p>Balancing the energy generated and consumed is crucial for smart grid efficiency. As solar production varies with climate, accurate forecasting is vital. We use AI and ML to enhance prediction accuracy and help smart grids perform better.</p>
+  </div>
+
+  <div class="section">
+    <h2>PV Solar Power Plant</h2>
+    <img src="{{ url_for('static', filename='pv.png') }}" alt="PV Solar Plant" class="image" />
+    <ul>
+      <li><strong>Rising Popularity:</strong> PV solar power is booming in India thanks to sunlight and tech.</li>
+      <li><strong>Purpose:</strong> Converts solar radiation to electricity via PV panels.</li>
+      <li><strong>Working:</strong> Sunlight → DC (PV modules) → AC (inverters) → Grid.</li>
+      <li><strong>Eco-Friendly:</strong> A green, sustainable energy source.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Problem Getting Solved</h2>
+    <ul>
+      <li><strong>Better Planning:</strong> Helps plan energy backups/storage when solar output is low.</li>
+      <li><strong>Lower Costs:</strong> Cuts unnecessary backups by accurate forecasting.</li>
+      <li><strong>Less Wastage:</strong> Enables full use of generated power.</li>
+      <li><strong>Stable Supply:</strong> Stabilizes grid by managing solar fluctuations.</li>
+      <li><strong>Support Clean Energy:</strong> Encourages renewable adoption.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Alerts and Recommendations</h2>
+
+    <h3>✅ High Solar Output: Excellent energy generation.</h3>
+    <ul>
+      <li>Maximize energy storage (if battery system available).</li>
+      <li>Schedule high-energy tasks like EV charging.</li>
+      <li>Store excess energy or sell it to the grid.</li>
+      <li>Monitor panel performance for consistency.</li>
+    </ul>
+
+    <h3>🔆 Moderate Solar Output: Good generation with balanced efficiency.</h3>
+    <ul>
+      <li>Run essential appliances as needed.</li>
+      <li>Conserve energy where possible.</li>
+      <li>Consider partially charging backup batteries.</li>
+    </ul>
+
+    <h3>⚠ Low Solar Output: Limited energy available.</h3>
+    <ul>
+      <li>Use only essential appliances.</li>
+      <li>Check for shading or dirt on panels.</li>
+      <li>Evaluate panel orientation.</li>
+      <li>Consider system expansion.</li>
+    </ul>
+
+    <h3>🚨 Very Low Solar Output: Insufficient for peak energy needs.</h3>
+    <ul>
+      <li>Switch to backup sources.</li>
+      <li>Reduce non-essential usage.</li>
+      <li>Power only critical systems.</li>
+      <li>Delay energy-heavy tasks.</li>
+      <li>Schedule high-use operations for peak sunlight.</li>
+    </ul>
+  </div>
+
+  <div class="team-section">
+    <footer>
+    <h2>Team Members</h2>
+    <p>👨‍💻 Jivites D</p>
+    <p>👨‍💻 Mehan Ranka</p>
+    <p>👨‍💻 Ramkumar K R</p>
+    <p>👨‍💻 Sukanthan</p>
+    </footer>
+  </div>
+
+  <div class="predict-button-wrapper">
+    <a href="{{ url_for('prediction_page') }}">
+      <button class="predict-button">Prediction</button>
+    </a>
+  </div>
+
+</body>
+</html>

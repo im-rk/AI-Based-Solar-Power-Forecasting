@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solar Power Prediction</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      background-size: cover;
+      background-attachment: fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 600;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    }
+
+    p {
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      transition: 0.3s ease-in-out;
+    }
+
+    input::placeholder {
+      color: #ddd;
+    }
+
+    input:hover, input:focus {
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 10px rgba(255, 183, 77, 0.6);
+      transform: scale(1.05);
+    }
+
+    button {
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(90deg, #ff9800, #ff5722);
+      color: #fff;
+      position: relative;
+      text-transform: uppercase;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #ff5722, #ff9800);
+      transform: scale(1.08);
+      box-shadow: 0 0 12px rgba(255, 183, 77, 0.8);
+    }
+
+    #predictionResult {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    #recommendation {
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffeb3b;
+    }
+
+    #newPrediction {
+      display: none;
+      background: linear-gradient(90deg, #ff5722, #d84315);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px rgba(255, 183, 77, 0.4); }
+      50% { box-shadow: 0 0 20px rgba(255, 183, 77, 0.7); }
+      100% { box-shadow: 0 0 10px rgba(255, 183, 77, 0.4); }
+    }
+
+    .predict-button-wrapper {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .predict-button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(90deg, #4caf50, #388e3c);
+      color: white;
+      text-transform: uppercase;
+      transition: 0.3s;
+    }
+
+    .predict-button:hover {
+      background: linear-gradient(90deg, #388e3c, #4caf50);
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Solar Power Prediction</h1>
+    <p>Enter the required parameters to predict solar power output.</p>
+
+    <form id="predictionForm">
+      <input type="number" id="sourceKey" name="sourceKey" placeholder="Source Key" required>
+      <input type="number" id="ambientTemp" name="ambientTemp" placeholder="Ambient Temperature (°C)" step="0.01" required>
+      <input type="number" id="moduleTemp" name="moduleTemp" placeholder="Module Temperature (°C)" step="0.01" required>
+      <input type="number" id="irradiation" name="irradiation" placeholder="Irradiation (W/m²)" step="0.01" required>
+      
+      <input type="date" id="date" name="date" value="2020-05-15" style="display:none;">
+
+
+      <input type="time" id="time" name="time" required>
+      <button type="submit">Predict</button>
+    </form>
+
+    <h3>Prediction Result:</h3>
+    <p id="predictionResult">-</p>
+    <p id="recommendation"></p>
+
+    <button id="newPrediction" onclick="resetForm()">New Prediction</button>
+  </div>
+
+  <div class="predict-button-wrapper">
+    <a href="{{ url_for('home') }}">
+      <button class="predict-button">Home</button>
+    </a>
+  </div>
+
+  <script>
+    document.getElementById("predictionForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+
+      fetch("/predict", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          document.getElementById("predictionResult").textContent = "Error: " + data.error;
+          document.getElementById("recommendation").textContent = "";
+        } else {
+          document.getElementById("predictionResult").innerHTML = `<strong>Predicted Output:</strong> ${data.prediction}`;
+          document.getElementById("recommendation").innerHTML = `<strong>Recommendation:</strong> ${data.recommendation}`;
+        }
+        document.getElementById("newPrediction").style.display = "block";
+      })
+      .catch(error => {
+        document.getElementById("predictionResult").textContent = "Prediction failed! Please try again.";
+        document.getElementById("recommendation").textContent = "";
+        console.error("Error:", error);
+      });
+    });
+
+    function resetForm() {
+      document.getElementById("predictionForm").reset();
+      document.getElementById("predictionResult").textContent = "-";
+      document.getElementById("recommendation").textContent = "";
+      document.getElementById("newPrediction").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
